@@ -1,6 +1,6 @@
 = Radiant Multilingual Pages Extension
 
-Provides multilingual pages for Radiant. A multilingual page has one slug for every language. Use slugs like 'about-us-en', 'about-us-de' or 'about-us', 'ueber-uns' and translate away using <r:translate en="Welcome" de="Willkommen" /> and <r:if_language lang="en"><p>Some endlish text</p></r:if_language> ...
+Provides multilingual pages for Radiant. A multilingual page has one slug for every language. Use slugs like 'about-us-en', 'about-us-de' or 'about-us', 'ueber-uns' and translate away using <r:translate en="Welcome" de="Willkommen" /> and <r:if_language lang="en"><p>Some english text</p></r:if_language> ...
 
 This extension is different from the "Language Redirect" extension. "Language Redirect" expects you to replicate your page tree for every language you use. "Multilingual Pages" allows you to define multiple language versions within one single page. 
 
