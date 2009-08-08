@@ -4,35 +4,8 @@ class MultilingualPage < Page
 
   after_save :initialize_multilingual_meta_part
   
-  # we only redefine this for multilingual root pages,
-  # the real multilingual discovery stuff happens in 
-  # redefined Page -> children -> find_by_slug()...
-  def find_by_url(orig_url, live = true, clean = true)
-    return nil if virtual?
-    url = clean_url(orig_url) if clean
-    if (!parent?) and (language=multilingual_slugs_by_slug[url.gsub('/','')]) and (not live or published?)
-      Thread.current[:requested_language] = language
-      self
-    else      
-      super(orig_url, live, clean)
-    end
-  end
-  
-  def child_url(child)
-    if parent?
-      super(child)
-    else
-      clean_url(read_attribute(:slug) + '/' + child.slug)
-    end
-  end
-  
-  
   def slug
-    if Thread.current[:requested_language].blank? or self.multilingual_slugs_by_language[Thread.current[:requested_language]].blank?
-      self.read_attribute(:slug)
-    else
-      self.multilingual_slugs_by_language[Thread.current[:requested_language]]
-    end
+    self.multilingual_slugs_by_language[Thread.current[:requested_language]||MultilingualPagesExtension::DEFAULT_LANGUAGE]||self.read_attribute(:slug)
   end
 
   def title ; multilingual_meta(:title) ; end

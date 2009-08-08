@@ -1,10 +1,10 @@
 = Radiant Multilingual Pages Extension
 
-Provides multilingual pages for Radiant. A multilingual page has one slug for every language. Use slugs like 'about-us-en', 'about-us-de' or 'about-us', 'ueber-uns' and translate away using <r:translate en="Welcome" de="Willkommen" /> and <r:if_language lang="en"><p>Some english text</p></r:if_language> ...
+Provides multilingual pages for Radiant. A multilingual page has one slug for every language. Use slugs like <code>about-us-en</code>, <code>about-us-de</code> or <code>about-us</code>, <code>ueber-uns</code> and translate away using <code><r:translate en="Welcome" de="Willkommen" /></code> and <code><r:if_language lang="en"><p>Some english text</p></r:if_language></code>.
 
 This extension is different from the "Language Redirect" extension. "Language Redirect" expects you to replicate your page tree for every language you use. "Multilingual Pages" allows you to define multiple language versions within one single page. 
 
-Special feature for non-multilingual pages: if you use the multilingual tags in layouts or global snippets, you might want to language-enable non-multilingual pages (blog articles, etc.) as well. Just add /lang-<your lang> to your regular urls and the tags work as if you had called a slug in <your lang>. This is also the preferred way of operation for your home page: simply use /lang-<your lang> instead of /.
+Special feature for non-multilingual pages: if you use the multilingual tags in layouts or global snippets, you might want to language-enable non-multilingual pages (blog articles, etc.) as well. Just add <code>/lang-<your lang></code> to your regular urls and the tags work as if you had called a slug in <code><your lang></code>. This is also the preferred way of operation for your home page: simply use <code>/lang-<your lang></code> instead of <code>/</code>.
 
 Good to know: this extension is cache-safe.
 
@@ -20,7 +20,94 @@ To install Multilingual Pages, run:
 
 == More Help
 
-See the included HELP docs here or read them in your Radiant interface with the Help extension installed.
+=== Tags
+
+You can use multilingual tags everywhere throughout your site, not only on multilingual pages. This is specifically useful for layouts and general snippets. For now, there are two tags: <code><r:translate /></code> and <code><r:if_language>...</r:if_language></code>. Use them like so:
+
+==== +translate+
+
+  <r:translate en="Welcome" de="Willkommen" />
+
+==== +if_language+
+  <r:if_language lang="en"><p>This is an english paragraph.</p></r:if_language>
+  <r:if_language lang="de"><p>Dies ist ein Absatz auf deutsch.</p></r:if_language>
+
+More help on tags is available within Radiant using the "Available Tags" reference.
+
+=== Language selection using multilingual slugs
+
+The main feature of this extension are multilingual slugs. A multilingual page can have one or more multilingual slugs. Define them right below the title field of your page like so:
+
+  en=home;de=startseite;fr=acceuil
+
+This will add three additional slugs resulting in three new ways to call your page: <code>/home</code>, <code>/startseite</code>, and <code>/acceuil</code>. Please note, that your original slug (as defined in the meta section of the page) works as well. It is recommended to not mention the english slug in the multilingual slugs again, even though it would not break anything.
+
+Of course, the multilingual slugs work on multiple levels. You can have multiple nested Mulilingual Pages and they all can have their own multilingual slugs. The Multilingual Pages Extension makes sure you can reach your pages just the way you would with regular Pages. Please note: you can't combine slugs of different languages here. Stuff like
+
+  http://domain.com/company/mitarbeiter/le-directeur
+
+does not make sense and will render a 404. These would work, however:
+
+  http://domain.com/company/staff/the-ceo
+  http://domain.com/firma/mitarbeiter/der-geschaeftsfuehrer
+  http://domain.com/entreprise/employes/le-directeur
+
+=== Language selection for non-multilingual pages
+
+There are pages which can't get multilingual slugs. One of them is the home page (see below), but also pages which come with other extensions won't support the multilingual slugs. This isn't that much of a problem, as there are two ways to cope with this:
+
+Let's say you have a blog using the Archive Extension and you want to offer that in multiple languages. 
+
+==== Solution #1: Replicate non-multilingual pages (not very elegant)
+
+As noted above: it's not very elegant, but works. You would just create one Archive page for each supported language and create blog articles in each language. This way, you could also have different articles in different languages. The downside of this solution: multilingual tags in your layout or general snippets will render/expand in english (or whatever your default language is). You would have to use a different layout and snippets for the replicated pages.
+
+==== Solution #2: Access non-multilingual pages using a route suffix (preferred)
+
+This is suitable for cases where you're okay with the fact that some of your content is not translated. Maybe, you don't have the staff to write your blog in all supported languages. However, you want the multilingual tags in your layout and general snippets. This case is supported using a route suffix which comes with Multilingual Pages. Just add <code>/lang-<your lang></code> (e.g. <code>/lang-de</code> for german) to any url and the multilingual tags in your page will render/expand in the <code><your lang></code> language.
+
+Technically, you can combine solutions #1 and #2. You could also use multilingual tags in your blog articles when you use the route suffixes, you just won't have urls in your language then.
+
+=== The Home page
+
+The home page somehow is a special beast. The problem is: it doesn't really have a slug. The slug of your home page is <code>/</code>. How do you translate that? Bummer. Route suffixes to the rescue! Just use <code>/lang-<your lang></code> (e.g. <code>/lang-de</code>) instead of <code>/</code> to access your home page in your preferred language.
+
+=== Navigation
+
+The good news: links on your multilingual pages will automatically look for a slug on the target page that matches the current language. Thus, stuff like 
+
+  <r:children:each>
+    <r:link/>
+  </r:children:each>
+
+will just work as expected.
+
+The bad news: this does not work with the <code><r:navigation>...</r:navigation></code> tag, as it wants you to explicitly specify the urls you'd like to link to. Something like
+
+  <r:navigation urls="Products: /products | Blog: /blog | Locations: /locations | About us: /about-us">
+    <r:normal><li><a href="<r:url />"><r:title /></a></li></r:normal>
+    <r:here><li><a class="active" href="<r:url />"><r:title /></a></li></r:here>
+    <r:selected><li><a class="active" href="<r:url />"><r:title /></a></li></r:selected>
+  </r:navigation>
+
+would have to become:
+
+  <r:if_language lang="en">
+    <r:navigation urls="Products: /products | Blog: /blog | Locations: /locations | About us: /about-us">
+      <r:normal><li><a href="<r:url />"><r:title /></a></li></r:normal>
+      <r:here><li><a class="active" href="<r:url />"><r:title /></a></li></r:here>
+      <r:selected><li><a class="active" href="<r:url />"><r:title /></a></li></r:selected>
+    </r:navigation>
+  </r:if_language>
+  <r:if_language lang="de">
+    <r:navigation urls="Produkte: /produkte | Blog: /blog/lang-de | Filialen: /filialen | Über uns: /ueber-uns">
+      <r:normal><li><a href="<r:url />"><r:title /></a></li></r:normal>
+      <r:here><li><a class="active" href="<r:url />"><r:title /></a></li></r:here>
+      <r:selected><li><a class="active" href="<r:url />"><r:title /></a></li></r:selected>
+    </r:navigation>
+  </r:if_language>
+
+That's not the prettiest thing in the World but it works. Please note, that we made use of the route suffix for the blog here as described above.
 
 == Version
 
