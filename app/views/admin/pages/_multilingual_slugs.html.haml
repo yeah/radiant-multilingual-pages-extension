@@ -1,0 +1,9 @@
+- if @page.is_a?(MultilingualPage)
+  %div.row
+    %table.fieldset
+      %tr
+        %th.label
+          %label{:for => "page_multilingual_slugs"}
+            = 'Multilingual slugs (e.g. "en=home;de=startseite")'
+          %td.field
+            = text_field :page, :multilingual_slugs, :class => 'textbox', :maxlength => 160, :size => 160

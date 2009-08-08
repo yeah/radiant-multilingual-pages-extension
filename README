@@ -1,0 +1,35 @@
+= Radiant Multilingual Pages Extension
+
+Provides multilingual pages for Radiant. A multilingual page has one slug for every language. Use slugs like 'about-us-en', 'about-us-de' or 'about-us', 'ueber-uns' and translate away using <r:translate en="Welcome" de="Willkommen" /> and <r:if_language lang="en"><p>Some endlish text</p></r:if_language> ...
+
+This extension is different from the "Language Redirect" extension. "Language Redirect" expects you to replicate your page tree for every language you use. "Multilingual Pages" allows you to define multiple language versions within one single page. 
+
+Good to know: the multi-lang slugs make it cache-safe.
+
+== Dependencies
+
+* Has been developed with Radiant 0.8
+
+== Installation 
+
+To install Multilingual Pages, run: 
+
+  rake radiant:extensions:multilingual_pages:install
+
+== More Help
+
+See the included HELP docs here or read them in your Radiant interface with the Help extension installed.
+
+== Version
+
+0.1
+
+== Licence
+
+MIT
+
+== Contributors
+
+* Jan Schulz-Hofen
+
+If you contribute, go ahead and add your name to the list!
