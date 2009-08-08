@@ -8,7 +8,7 @@ module MultilingualPageTags
     <pre><code><r:translate en="Welcome" de="Willkommen" /></code></pre>    
   }
   tag "translate" do |tag|
-    tag.attr[Thread.current[:requested_language]||'en']
+    tag.attr[Thread.current[:requested_language]||MultilingualPagesExtension::DEFAULT_LANGUAGE]
   end
     
   desc %{
@@ -19,7 +19,7 @@ module MultilingualPageTags
     <pre><code><r:if_language lang="de"><p>Dies ist ein Absatz auf deutsch.</p></r:if_language></code></pre>
   }
   tag "if_language" do |tag|
-    tag.expand if tag.attr['lang'] == (Thread.current[:requested_language]||'en')
+    tag.expand if tag.attr['lang'] == (Thread.current[:requested_language]||MultilingualPagesExtension::DEFAULT_LANGUAGE)
   end
     
 end

@@ -30,7 +30,7 @@ class MultilingualPage < Page
   
   
   def slug
-    if self.multilingual_slugs_by_language.blank? or Thread.current[:requested_language].blank?
+    if Thread.current[:requested_language].blank? or self.multilingual_slugs_by_language[Thread.current[:requested_language]].blank?
       self.read_attribute(:slug)
     else
       self.multilingual_slugs_by_language[Thread.current[:requested_language]]
@@ -67,7 +67,7 @@ class MultilingualPage < Page
   def initialize_multilingual_meta_part
     unless parts.any? { |part| part.name == MULTILINGUAL_META_PART_NAME }
       content = %{
-en:
+#{MultilingualPagesExtension::DEFAULT_LANGUAGE}:
   title: #{read_attribute(:title)}
   breadcrumb: #{read_attribute(:breadcrumb)}
   description: #{read_attribute(:description)}

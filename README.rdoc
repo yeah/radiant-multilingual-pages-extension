@@ -4,11 +4,13 @@ Provides multilingual pages for Radiant. A multilingual page has one slug for ev
 
 This extension is different from the "Language Redirect" extension. "Language Redirect" expects you to replicate your page tree for every language you use. "Multilingual Pages" allows you to define multiple language versions within one single page. 
 
-Good to know: the multi-lang slugs make it cache-safe.
+Special feature for non-multilingual pages: if you use the multilingual tags in layouts or global snippets, you might want to language-enable non-multilingual pages (blog articles, etc.) as well. Just add /lang-<your lang> to your regular urls and the tags work as if you had called a slug in that language. This is also the preferred way of operation for your home page: simply use /lang-<your lang> instead of /.
+
+Good to know: this extension is cache-safe.
 
 == Dependencies
 
-* Has been developed with Radiant 0.8
+Has been developed with Radiant 0.8
 
 == Installation 
 
@@ -22,7 +24,7 @@ See the included HELP docs here or read them in your Radiant interface with the 
 
 == Version
 
-0.1
+0.3
 
 == Licence
 
