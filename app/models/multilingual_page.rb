@@ -2,8 +2,6 @@ class MultilingualPage < Page
 
   description 'Provides multilingual pages for Radiant. A multilingual page has one slug for every language.'
 
-  MULTILINGUAL_META_PART_NAME = 'multilingual meta'
-
   after_save :initialize_multilingual_meta_part
   
   # we only redefine this for multilingual root pages,
@@ -65,7 +63,7 @@ class MultilingualPage < Page
   private
 
   def initialize_multilingual_meta_part
-    unless parts.any? { |part| part.name == MULTILINGUAL_META_PART_NAME }
+    unless parts.any? { |part| part.name == MultilingualPagesExtension::META_PART_NAME }
       content = %{
 #{MultilingualPagesExtension::DEFAULT_LANGUAGE}:
   title: #{read_attribute(:title)}
@@ -82,13 +80,13 @@ class MultilingualPage < Page
   keywords: #{slug.split(/\W/).join(', ')}
         }
       end
-      parts.create(:name => MULTILINGUAL_META_PART_NAME, :content => content) 
+      parts.create(:name => MultilingualPagesExtension::META_PART_NAME, :content => content) 
     end
   end
 
   def multilingual_meta(attr)
     if Thread.current[:requested_language] and 
-      part = parts.detect{|part| part.name == MULTILINGUAL_META_PART_NAME} and
+      part = parts.detect{|part| part.name == MultilingualPagesExtension::META_PART_NAME} and
       meta = YAML.load(part.content)[Thread.current[:requested_language]]
 
       meta[attr.to_s]

@@ -6,7 +6,7 @@ class MultilingualPagesExtension < Radiant::Extension
   def activate
     MultilingualPage
     if Radiant::Config.table_exists?
-      {:default_language => 'en', :non_multilingual_route => 'lang-'}.each do |key,value|
+      {:default_language => 'en', :non_multilingual_route => 'lang-', :meta_part_name => 'multilingual meta'}.each do |key,value|
         Radiant::Config["multilingual.#{key}"] = value unless Radiant::Config["multilingual.#{key}"]
         MultilingualPagesExtension.const_set(key.to_s.upcase, Radiant::Config["multilingual.#{key}"])
       end
