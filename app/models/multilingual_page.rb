@@ -1,13 +1,33 @@
 class MultilingualPage < Page
 
-  description %{
-    A multilingual page can have multiple slugs -- one in each supported language.
-    This is it. no more. no less.
-  }
+  description 'Provides multilingual pages for Radiant. A multilingual page has one slug for every language.'
 
   MULTILINGUAL_META_PART_NAME = 'multilingual meta'
 
   after_save :initialize_multilingual_meta_part
+  
+  # we only redefine this for multilingual root pages,
+  # the real multilingual discovery stuff happens in 
+  # redefined Page -> children -> find_by_slug()...
+  def find_by_url(orig_url, live = true, clean = true)
+    return nil if virtual?
+    url = clean_url(orig_url) if clean
+    if (!parent?) and (language=multilingual_slugs_by_slug[url.gsub('/','')]) and (not live or published?)
+      Thread.current[:requested_language] = language
+      self
+    else      
+      super(orig_url, live, clean)
+    end
+  end
+  
+  def child_url(child)
+    if parent?
+      super(child)
+    else
+      clean_url(read_attribute(:slug) + '/' + child.slug)
+    end
+  end
+  
   
   def slug
     if self.multilingual_slugs_by_language.blank? or Thread.current[:requested_language].blank?
@@ -17,33 +37,13 @@ class MultilingualPage < Page
     end
   end
 
-  def title
-    multilingual_meta(:title)
-  end
+  def title ; multilingual_meta(:title) ; end
+  def breadcrumb ; multilingual_meta(:breadcrumb) ; end
+  def description ; multilingual_meta(:description) ; end
+  def keywords ; multilingual_meta(:keywords) ; end
+            
+  def languages ; self.multilingual_slugs_by_language.keys ; end
 
-  def breadcrumb
-    multilingual_meta(:breadcrumb)
-  end
-
-  def description
-    multilingual_meta(:description)
-  end
-
-  def keywords
-    multilingual_meta(:keywords)
-  end
-
-  def multilingual_meta(attr)
-    if Thread.current[:requested_language] and 
-      part = parts.detect{|part| part.name == MULTILINGUAL_META_PART_NAME} and
-      meta = YAML.load(part.content)[Thread.current[:requested_language]]
-
-      meta[attr.to_s]
-    else 
-      read_attribute(attr.to_sym)
-    end
-  end
-      
   def multilingual_slugs_by_language
     hash = {}
     (self.multilingual_slugs||[]).split(';').each do |part|
@@ -83,6 +83,17 @@ en:
         }
       end
       parts.create(:name => MULTILINGUAL_META_PART_NAME, :content => content) 
+    end
+  end
+
+  def multilingual_meta(attr)
+    if Thread.current[:requested_language] and 
+      part = parts.detect{|part| part.name == MULTILINGUAL_META_PART_NAME} and
+      meta = YAML.load(part.content)[Thread.current[:requested_language]]
+
+      meta[attr.to_s]
+    else 
+      read_attribute(attr.to_sym)
     end
   end
 
