@@ -14,7 +14,7 @@ Good to know: the multi-lang slugs make it cache-safe.
 
 To install Multilingual Pages, run: 
 
-  rake radiant:extensions:multilingual_pages:install
+  ./script/extension install multilingual_pages
 
 == More Help
 
