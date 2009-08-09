@@ -3,6 +3,7 @@ class MultilingualPage < Page
   description 'Provides multilingual pages for Radiant. A multilingual page has one slug for every language.'
 
   after_save :initialize_multilingual_meta_part
+  after_save :update_languages_in_config
   
   def slug
     self.multilingual_slugs_by_language[Thread.current[:requested_language]||MultilingualPagesExtension::DEFAULT_LANGUAGE]||self.read_attribute(:slug)
@@ -54,6 +55,15 @@ class MultilingualPage < Page
         }
       end
       parts.create(:name => MultilingualPagesExtension::META_PART_NAME, :content => content) 
+    end
+  end
+  
+  def update_languages_in_config
+    languages.each do |language|
+      unless MultilingualPagesExtension::AVAILABLE_LANGUAGES.split(',').include?(language)
+        Radiant::Config['multilingual.available_languages'] += ",#{language}"
+        MultilingualPagesExtension.const_set('AVAILABLE_LANGUAGES', Radiant::Config['multilingual.available_languages'])
+      end
     end
   end
 
