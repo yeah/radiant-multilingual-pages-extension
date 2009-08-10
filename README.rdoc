@@ -109,9 +109,47 @@ would have to become:
 
 That's not the prettiest thing in the World but it works. Please note, that we made use of the route suffix for the blog here as described above.
 
+=== Language selection (aka "flag links")
+
+Of course, you want those nice little flags on your web site as soon as you have Multilingual Pages in place, don't you? Well, look no further, here comes <code><r:language_selection>...</r:language_selection></code>. It behaves similar to Radiant's <code><r:navigation>...</r:navigation></code> so it should be easy to understand and implement. Here are two examples, one for flags (yay, flags!) and one for a select box.
+
+==== Flags
+
+  <r:language_selection>
+    <r:current>
+      <img src="/images/flags/<r:language />.png" />
+    </r:current>
+    <r:available>
+      <a href="<r:url />" title="<r:title />"><img src="/images/flags/<r:language />-inactive.png" /></a>
+    </r:available>
+    <r:unavailable>
+      <img src="/images/flags/<r:language />-strikethrough.png" />
+    </r:unavailable>
+    <r:between>&nbsp;</r:between>
+  </r:language_selection>
+
+(You can get very nice flag icons for free from http://www.famfamfam.com/lab/icons/silk.)
+
+==== Select box
+
+  <select onchange="location.href=this.value;">
+    <r:language_selection>
+      <r:current>
+        <option selected="selected" value="<r:url />"><r:language_name /></option>
+      </r:current>
+      <r:available>
+        <option value="<r:url />"><r:language_name /></option>
+      </r:available>
+      <r:unavailable>
+        <option disabled="disabled" value="<r:url />"><r:language_name /></option>
+      </r:unavailable>
+    </r:language_selection>
+  </select>
+
+
 == Version
 
-0.3
+0.4
 
 == Licence
 

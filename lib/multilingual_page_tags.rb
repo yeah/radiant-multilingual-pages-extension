@@ -54,13 +54,13 @@ module MultilingualPageTags
 <select onchange="location.href=this.value;">
   <r:language_selection>
     <r:current>
-      <option selected="selected" value="<r:url />"><r:language /></option>
+      <option selected="selected" value="<r:url />"><r:language_name /></option>
     </r:current>
     <r:available>
-      <option value="<r:url />"><r:language /></option>
+      <option value="<r:url />"><r:language_name /></option>
     </r:available>
     <r:unavailable>
-      <option disabled="disabled" value="<r:url />"><r:language /></option>
+      <option disabled="disabled" value="<r:url />"><r:language_name /></option>
     </r:unavailable>
   </r:language_selection>
 </select>
@@ -76,7 +76,8 @@ module MultilingualPageTags
         
     MultilingualPagesExtension::AVAILABLE_LANGUAGES.split(',').each do |language|
       hash[:title] = page.is_a?(MultilingualPage) ? page.multilingual_meta(:title, language) : page.title
-      hash[:language] = MultilingualPagesExtension::LANGUAGE_NAMES[language]||language
+      hash[:language] = language
+      hash[:language_name] = MultilingualPagesExtension::LANGUAGE_NAMES[language]||language
       url = page.is_a?(MultilingualPage) ? page.url(language) : "#{page.url}#{MultilingualPagesExtension::NON_MULTILINGUAL_ROUTE}#{language}"
       hash[:url] = relative_url_for(url, tag.globals.page.request)
       
@@ -98,7 +99,7 @@ module MultilingualPageTags
       hash[symbol] = tag.block
     end
   end
-  [:title, :language, :url].each do |symbol|
+  [:title, :language, :language_name, :url].each do |symbol|
     tag "language_selection:#{symbol}" do |tag|
       hash = tag.locals.language_selection
       hash[symbol]
