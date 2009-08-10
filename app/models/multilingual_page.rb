@@ -5,16 +5,40 @@ class MultilingualPage < Page
   after_save :initialize_multilingual_meta_part
   after_save :update_languages_in_config
   
-  def slug
-    self.multilingual_slugs_by_language[Thread.current[:requested_language]||MultilingualPagesExtension::DEFAULT_LANGUAGE]||self.read_attribute(:slug)
+  def slug(language=nil)
+    language ||= Thread.current[:requested_language]
+    self.multilingual_slugs_by_language[language||MultilingualPagesExtension::DEFAULT_LANGUAGE]||self.read_attribute(:slug)
   end
+  
+  def url(language=nil)
+    if language.nil?
+      super()
+    elsif parent? and parent.is_a?(MultilingualPage)
+      parent.child_url(self,language)
+    elsif parent?
+      parent.child_url(self).gsub("/#{slug}/","/#{slug(language)}/")
+    else
+      clean_url(slug(language))
+    end
+  end
+  
+  def child_url(child, language=nil)
+    if language.nil?
+      super(child)
+    else
+      clean_url(url(language) + '/' + child.slug(language))
+    end
+  end
+  
 
   def title ; multilingual_meta(:title) ; end
   def breadcrumb ; multilingual_meta(:breadcrumb) ; end
   def description ; multilingual_meta(:description) ; end
   def keywords ; multilingual_meta(:keywords) ; end
             
-  def languages ; self.multilingual_slugs_by_language.keys ; end
+  def languages
+    ([MultilingualPagesExtension::DEFAULT_LANGUAGE] + self.multilingual_slugs_by_language.keys).uniq
+  end
 
   def multilingual_slugs_by_language
     hash = {}
@@ -32,6 +56,18 @@ class MultilingualPage < Page
       hash[slug] = language
     end
     return hash
+  end
+
+  def multilingual_meta(attr,language=nil)
+    language ||= Thread.current[:requested_language]
+    if language and 
+      part = parts.detect{|part| part.name == MultilingualPagesExtension::META_PART_NAME} and
+      meta = YAML.load(part.content)[language]
+
+      meta[attr.to_s]
+    else 
+      read_attribute(attr.to_sym)
+    end
   end
 
   private
@@ -64,17 +100,6 @@ class MultilingualPage < Page
         Radiant::Config['multilingual.available_languages'] += ",#{language}"
         MultilingualPagesExtension.const_set('AVAILABLE_LANGUAGES', Radiant::Config['multilingual.available_languages'])
       end
-    end
-  end
-
-  def multilingual_meta(attr)
-    if Thread.current[:requested_language] and 
-      part = parts.detect{|part| part.name == MultilingualPagesExtension::META_PART_NAME} and
-      meta = YAML.load(part.content)[Thread.current[:requested_language]]
-
-      meta[attr.to_s]
-    else 
-      read_attribute(attr.to_sym)
     end
   end
 

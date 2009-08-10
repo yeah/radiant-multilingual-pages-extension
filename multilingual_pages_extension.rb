@@ -50,4 +50,14 @@ class MultilingualPagesExtension < Radiant::Extension
   
   def deactivate
   end
+  
+  # TODO: Get an official, complete list...
+  LANGUAGE_NAMES = {
+    'en' => 'English',
+    'de' => 'Deutsch',
+    'fr' => 'Français',
+    'es' => 'Espagnol',
+    'it' => 'Italiano'
+    # more...
+  }
 end
