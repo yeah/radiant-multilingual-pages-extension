@@ -1,5 +1,5 @@
 class MultilingualPagesExtension < Radiant::Extension
-  version '0.4'
+  version '0.5'
   description 'Provides multilingual pages for Radiant. A multilingual page has one slug for every language.'
   url 'http://rocket-rentals.de'
   
