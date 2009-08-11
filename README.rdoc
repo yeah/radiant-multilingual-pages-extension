@@ -146,14 +146,37 @@ Of course, you want those nice little flags on your web site as soon as you have
     </r:language_selection>
   </select>
 
+=== Language detection
+
+Alright, language selection is great, but you want your first time users to see the right page according to their <code>Accept-Language</code> headers, don't you? Perfect, because that's what Mulilingual Pages does out of the box. If the home page is accessed using the basic slug <code>/</code>, language detection will redirect the user to the right language version using the route suffix.
+
+If that's not what you like, you can always disable this feature by setting the <code>multilingual.use_language_detection</code> config option to <code>false</code>.
+
+== Configuration option reference
+
+Configuration options are stored in Radiant's <code>config</code> table and are prefixed with <code>multilingual.</code>, so they should be easy to spot. The following options are available:
+
+* <code>non_multilingual_route</code>: The first part of the route suffix which is used for non-multilingual pages. Can be set to <code>''</code> (the empty string) in order to just append the two-character language code to non-multilingual routes. But beware: if you have slugs with only two characters, you might get in trouble and you'd better set <code>non_multilingual_route</code> to something like <code>lang-</code>. (Default: <code>lang-</code>)
+
+* <code>default_language</code>: The default language that is used when nothing else is found. (Default: <code>en</code>)
+
+* <code>meta_part_name</code>: The name of the page parts that are added to multilingual pages and which are used to specify multilingual meta information like title, breadcrumbs, etc. (Default: <code>multilingual meta</code>)
+
+* <code>available_languages</code>: A comma separated list of available languages throughout your site, used for <code><r:language_selection>...</r:language_selection></code> and other things. Every time you add a multilingual slug to a multilingual page, its two character language code is automatically appended to this list for you. If you remove a language version, you'd have to remove it from this list as well, in order for it to disappear form language selection menus. You can also re-order the languages here, language selection will follow the order of this list. (Default: <code>en</code> and evolving with your multilingual slugs)
+
+* <code>use_language_detection</code>: Use this switch to turn language detection (see above) on or off. (Default: <code>true</code>)
 
 == Version
 
-0.4
+0.5
 
 == Licence
 
 MIT
+
+== Credits
+
+The language detection feature borrows concept and code from the Language Redirect extension.
 
 == Contributors
 
