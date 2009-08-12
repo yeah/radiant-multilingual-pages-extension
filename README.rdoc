@@ -22,7 +22,7 @@ To install Multilingual Pages, run:
 
 === Tags
 
-You can use multilingual tags everywhere throughout your site, not only on multilingual pages. This is specifically useful for layouts and general snippets. For now, there are two tags: <code><r:translate /></code> and <code><r:if_language>...</r:if_language></code>. Use them like so:
+You can use multilingual tags everywhere throughout your site, not only on multilingual pages. This is specifically useful for layouts and general snippets. For now, there are three tags: <code><r:translate /></code>, <code><r:if_language>...</r:if_language></code>, and <code><r:language_selection>...</r:language_selection></code>. Use them like so:
 
 ==== +translate+
 
@@ -31,6 +31,15 @@ You can use multilingual tags everywhere throughout your site, not only on multi
 ==== +if_language+
   <r:if_language lang="en"><p>This is an english paragraph.</p></r:if_language>
   <r:if_language lang="de"><p>Dies ist ein Absatz auf deutsch.</p></r:if_language>
+
+==== +language_selection+
+
+  <r:language_selection>
+    <r:current> ... <r:language /> ...</r:current>
+    <r:available> ... <r:url /> ... <r:title /> ... <r:language /> ... </r:available>
+    <r:unavailable> ... <r:language /> ... </r:unavailable>
+    <r:between> ... </r:between>
+  </r:language_selection>
 
 More help on tags is available within Radiant using the "Available Tags" reference.
 
