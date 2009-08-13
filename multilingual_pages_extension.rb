@@ -1,7 +1,7 @@
 class MultilingualPagesExtension < Radiant::Extension
   version '0.5'
   description 'Provides multilingual pages for Radiant. A multilingual page has one slug for every language.'
-  url 'http://github.com/yeah/radiant-multilingual-pages-extension/tree/master'
+  url 'http://rocket-rentals.de'
   
   def activate
     
@@ -38,7 +38,7 @@ class MultilingualPagesExtension < Radiant::Extension
           elsif pages = find(:all, :conditions => ['multilingual_slugs LIKE ? AND parent_id=?',"%#{slug}%", proxy_owner.id])
             pages.each do |page|
               if language = page.multilingual_slugs_by_slug[slug]
-                Thread.current[:requested_language] = language
+                page.requested_language = language
                 return page
               end
             end

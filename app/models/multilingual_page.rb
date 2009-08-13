@@ -6,7 +6,7 @@ class MultilingualPage < Page
   after_save :update_languages_in_config
   
   def slug(language=nil)
-    language ||= Thread.current[:requested_language]
+    language ||= self.requested_language
     self.multilingual_slugs_by_language[language||MultilingualPagesExtension::DEFAULT_LANGUAGE]||self.read_attribute(:slug)
   end
   
@@ -59,7 +59,7 @@ class MultilingualPage < Page
   end
 
   def multilingual_meta(attr,language=nil)
-    language ||= Thread.current[:requested_language]
+    language ||= self.requested_language
     if language and 
       part = parts.detect{|part| part.name == MultilingualPagesExtension::META_PART_NAME} and
       meta = YAML.load(part.content)[language]

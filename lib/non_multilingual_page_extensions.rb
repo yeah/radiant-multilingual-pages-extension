@@ -6,13 +6,14 @@ module NonMultilingualPageExtensions
       alias_method_chain :headers, :language_detection
       alias_method_chain :response_code, :language_detection
       alias_method_chain :cache?, :language_detection
+      attr_accessor :requested_language
     end
   end
   
   def find_by_url_with_language_param(url, live = true, clean = true)
     url = clean_url(url) if clean
     if url =~ %r{^#{ self.url }#{MultilingualPagesExtension::NON_MULTILINGUAL_ROUTE}(\w\w)\/$}
-      Thread.current[:requested_language] = $1
+      self.requested_language = $1
       self
     else
       find_by_url_without_language_param(url, live, clean)
@@ -38,7 +39,7 @@ module NonMultilingualPageExtensions
   private
   
   def needs_language_detection?
-    MultilingualPagesExtension::USE_LANGUAGE_DETECTION and (not parent?) and Thread.current[:requested_language].nil?
+    MultilingualPagesExtension::USE_LANGUAGE_DETECTION and (not parent?) and self.requested_language.nil?
   end
   
   def languages
