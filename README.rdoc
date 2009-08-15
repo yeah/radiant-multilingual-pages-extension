@@ -47,7 +47,7 @@ More help on tags is available within Radiant using the "Available Tags" referen
 
 The main feature of this extension are multilingual slugs. A multilingual page can have one or more multilingual slugs. Define them right below the title field of your page like so:
 
-  en=home;de=startseite;fr=acceuil
+  en=our-staff;de=unsere-mitarbeiter;fr=nos-employes
 
 This will add three additional slugs resulting in three new ways to call your page: <code>/home</code>, <code>/startseite</code>, and <code>/acceuil</code>. Please note, that your original slug (as defined in the meta section of the page) works as well. It is recommended to not mention the english slug in the multilingual slugs again, even though it would not break anything.
 
