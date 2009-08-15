@@ -185,7 +185,8 @@ MIT
 
 == Credits
 
-The language detection feature borrows concept and code from the Language Redirect extension.
+* The language detection feature borrows concept and code from the Language Redirect extension, http://wiki.github.com/radiant/radiant/language-redirect-extension
+* The list of languages is taken from Wikipedia, http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 
 == Contributors
 
