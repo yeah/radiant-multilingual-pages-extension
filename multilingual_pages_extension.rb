@@ -38,7 +38,7 @@ class MultilingualPagesExtension < Radiant::Extension
           elsif pages = find(:all, :conditions => ['multilingual_slugs LIKE ? AND parent_id=?',"%#{slug}%", proxy_owner.id])
             pages.each do |page|
               if language = page.multilingual_slugs_by_slug[slug]
-                page.requested_language = language
+                Thread.current[:requested_language] = language
                 return page
               end
             end

@@ -8,7 +8,7 @@ module MultilingualPageTags
     <pre><code><r:translate en="Welcome" de="Willkommen" /></code></pre>    
   }
   tag "translate" do |tag|
-    tag.attr[tag.locals.page.requested_language||MultilingualPagesExtension::DEFAULT_LANGUAGE]
+    tag.attr[Thread.current[:requested_language]||MultilingualPagesExtension::DEFAULT_LANGUAGE]
   end
     
   desc %{
@@ -19,7 +19,7 @@ module MultilingualPageTags
     <pre><code><r:if_language lang="de"><p>Dies ist ein Absatz auf deutsch.</p></r:if_language></code></pre>
   }
   tag "if_language" do |tag|
-    tag.expand if tag.attr['lang'] == (tag.locals.page.requested_language||MultilingualPagesExtension::DEFAULT_LANGUAGE)
+    tag.expand if tag.attr['lang'] == (Thread.current[:requested_language]||MultilingualPagesExtension::DEFAULT_LANGUAGE)
   end
   
   desc %{
@@ -81,7 +81,7 @@ module MultilingualPageTags
       url = page.is_a?(MultilingualPage) ? page.url(language) : "#{page.url}#{MultilingualPagesExtension::NON_MULTILINGUAL_ROUTE}#{language}"
       hash[:url] = relative_url_for(url, tag.globals.page.request)
       
-      if (tag.locals.page.requested_language||MultilingualPagesExtension::DEFAULT_LANGUAGE) == language
+      if (Thread.current[:requested_language]||MultilingualPagesExtension::DEFAULT_LANGUAGE) == language
         result << hash[:current].call
       elsif page.is_a?(MultilingualPage) and not page.languages.include?(language)
         result << hash[:unavailable].call
