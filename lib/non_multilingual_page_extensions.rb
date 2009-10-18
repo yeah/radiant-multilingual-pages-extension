@@ -56,6 +56,7 @@ module NonMultilingualPageExtensions
       weight = both[1] ? Float(both[1]) : 1
       [-weight, lang]
     end.sort_by(&:first).map(&:last)
+    langs_with_weights.blank? ? [MultilingualPagesExtension::DEFAULT_LANGUAGE] : langs_with_weights
   end
 
   def location
