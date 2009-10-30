@@ -9,6 +9,7 @@ class MultilingualPagesExtension < Radiant::Extension
     MultilingualPage
     
     # get config from database or initialize defaults
+    # DO NOT EDIT SETTINGS HERE, use the config table instead ;-)
     if Radiant::Config.table_exists?
       {:default_language => 'en', 
        :non_multilingual_route => 'lang-', 
