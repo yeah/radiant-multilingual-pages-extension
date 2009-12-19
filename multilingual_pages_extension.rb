@@ -22,7 +22,7 @@ class MultilingualPagesExtension < Radiant::Extension
     end
     
     # adapt page edit admin ui
-    admin.page.edit.add(:form, "multilingual_slugs", :before => 'edit_extended_metadata')
+    admin.page.edit.add(:extended_metadata, "multilingual_slugs", :before => 'edit_extended_metadata')
 
     # enable tags in regular and multilingual pages
     MultilingualPage.send(:include, MultilingualPageTags)
