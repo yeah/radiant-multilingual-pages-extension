@@ -32,6 +32,9 @@ You can use multilingual tags everywhere throughout your site, not only on multi
   <r:if_language lang="en"><p>This is an english paragraph.</p></r:if_language>
   <r:if_language lang="de"><p>Dies ist ein Absatz auf deutsch.</p></r:if_language>
 
+==== +meta:language+
+  <r:meta:language />
+
 ==== +language_selection+
 
   <r:language_selection>
@@ -160,6 +163,10 @@ Of course, you want those nice little flags on your web site as soon as you have
 Alright, language selection is great, but you want your first time users to see the right page according to their <code>Accept-Language</code> headers, don't you? Perfect, because that's what Mulilingual Pages does out of the box. If the home page is accessed using the basic slug <code>/</code>, language detection will redirect the user to the right language version using the route suffix.
 
 If that's not what you like, you can always disable this feature by setting the <code>multilingual.use_language_detection</code> config option to <code>false</code>.
+
+=== Meta tag
+
+For various reasons (SEO being one), it is good practice to include a <code><meta /></code> tag on every page revealing the current language the page is written in. Just add <code><r:meta:language /></code> to the <code><head /></code> section of your layout and you're done.
 
 == Configuration option reference
 

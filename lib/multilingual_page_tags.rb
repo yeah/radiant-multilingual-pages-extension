@@ -23,6 +23,16 @@ module MultilingualPageTags
   end
   
   desc %{
+    Renders a meta tag with the current language. (Put this in your layout.)
+    
+    *Usage:*
+    <pre><code><r:meta:language/></code></pre>
+  }
+  tag "meta:language" do |tag|
+    "<meta name=\"language\" content=\"#{Thread.current[:requested_language]||MultilingualPagesExtension::DEFAULT_LANGUAGE}\"/>"
+  end
+  
+  desc %{
     Renders a list of links to versions of the page in other available languages. Links can have three states:
 
     * @current@ specifies the state of the link when this language is currently selected
