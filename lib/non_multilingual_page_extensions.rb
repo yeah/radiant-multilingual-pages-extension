@@ -60,8 +60,8 @@ module NonMultilingualPageExtensions
 
   def location
     language = languages.detect{|l| MultilingualPagesExtension::AVAILABLE_LANGUAGES.include?(l)} || MultilingualPagesExtension::DEFAULT_LANGUAGE
-    path = clean_url("#{request.request_uri}/#{MultilingualPagesExtension::NON_MULTILINGUAL_ROUTE}#{language}")
-    "#{request.protocol}#{request.host_with_port}#{path}"
+    path = clean_url("#{request.path}/#{MultilingualPagesExtension::NON_MULTILINGUAL_ROUTE}#{language}")
+    "#{request.protocol}#{request.host_with_port}#{path}" << (request.query_string.blank? ? '' : "?#{request.query_string}")
   end  
   
 end
