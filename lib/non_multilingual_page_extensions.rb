@@ -29,7 +29,7 @@ module NonMultilingualPageExtensions
   end
 
   def response_code_with_language_detection
-    needs_language_detection? ? 302 : response_code_without_language_detection
+    needs_language_detection? ? 301 : response_code_without_language_detection
   end
   
   def cache_with_language_detection?
