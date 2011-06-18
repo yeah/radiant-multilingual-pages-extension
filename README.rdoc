@@ -10,7 +10,7 @@ Good to know: this extension is cache-safe.
 
 == Dependencies
 
-Has been developed with Radiant 0.8
+Has been developed with Radiant 0.8, seems to be working with 0.9
 
 == Installation 
 
