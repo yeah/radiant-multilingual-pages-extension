@@ -31,10 +31,10 @@ class MultilingualPage < Page
   end
   
 
-  def title ; multilingual_meta(:title) ; end
-  def breadcrumb ; multilingual_meta(:breadcrumb) ; end
-  def description ; multilingual_meta(:description) ; end
-  def keywords ; multilingual_meta(:keywords) ; end
+  def title ; multilingual_meta(:title)||super ; end
+  def breadcrumb ; multilingual_meta(:breadcrumb)||super ; end
+  def description ; multilingual_meta(:description)||super ; end
+  def keywords ; multilingual_meta(:keywords)||super ; end
             
   def languages
     ([MultilingualPagesExtension::DEFAULT_LANGUAGE] + self.multilingual_slugs_by_language.keys).uniq
@@ -62,11 +62,10 @@ class MultilingualPage < Page
     language ||= Thread.current[:requested_language]
     if language and 
       part = parts.detect{|part| part.name == MultilingualPagesExtension::META_PART_NAME} and
+      part.content.present? and
       meta = YAML.load(part.content)[language]
 
       meta[attr.to_s]
-    else 
-      read_attribute(attr.to_sym)
     end
   end
 
